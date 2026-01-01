@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Customize Your Card</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .dashboard-header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .dashboard-title {
+            font-size: 32px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .dashboard-subtitle {
+            color: #86868b;
+            font-size: 16px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .panel-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1d1d1f;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .panel-icon {
+            font-size: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 8px;
+        }
+
+        .form-input,
+        .form-textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e5e5ea;
+            border-radius: 12px;
+            font-size: 15px;
+            font-family: inherit;
+            color: #1d1d1f;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .avatar-upload-section {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .avatar-preview {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background-size: 200% 200%;
+            animation: avatarGlow 3s ease-in-out infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+            position: relative;
+        }
+
+        @keyframes avatarGlow {
+
+            0%,
+            100% {
+                box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+                background-position: 0% 50%;
+            }
+
+            50% {
+                box-shadow: 0 8px 32px rgba(240, 147, 251, 0.6);
+                background-position: 100% 50%;
+            }
+        }
+
+        .avatar-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar-placeholder {
+            font-size: 48px;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .upload-button,
+        .random-button {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            margin: 0 4px;
+        }
+
+        .upload-button:hover,
+        .random-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .link-item {
+            background: #f5f7ff;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .link-item:hover {
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+        }
+
+        .link-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .link-name {
+            font-weight: 600;
+            color: #1d1d1f;
+            font-size: 16px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 28px;
+        }
+
+        .toggle-switch input {
+            display: none;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            inset: 0;
+            background-color: #ccc;
+            transition: 0.3s;
+            border-radius: 34px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+
+        input:checked+.toggle-slider {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        input:checked+.toggle-slider:before {
+            transform: translateX(22px);
+        }
+
+        .save-button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            margin-top: 24px;
+        }
+
+        .save-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .preview-button {
+            width: 100%;
+            padding: 16px;
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 12px;
+        }
+
+        .preview-button:hover {
+            background: #f0f3ff;
+            transform: translateY(-2px);
+        }
+
+        .add-link-button {
+            width: 100%;
+            padding: 14px;
+            background: #f5f7ff;
+            color: #667eea;
+            border: 2px dashed #667eea;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 16px;
+        }
+
+        .add-link-button:hover {
+            background: #eef2ff;
+            border-style: solid;
+        }
+
+        .delete-link-button {
+            padding: 6px 12px;
+            background: #ff4757;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .delete-link-button:hover {
+            background: #ee1f3f;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1 class="dashboard-title">🎨 Customize Your Digital Card</h1>
+            <p class="dashboard-subtitle">Design your perfect profile and manage your links</p>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- Profile Settings Panel -->
+            <div class="panel">
+                <h2 class="panel-title">
+                    <span class="panel-icon">👤</span>
+                    Profile Settings
+                </h2>
+
+                <div class="avatar-upload-section">
+                    <div class="avatar-preview" id="avatarPreview">
+                        <span class="avatar-placeholder">👩‍💼</span>
+                    </div>
+                    <div>
+                        <div class="file-input-wrapper">
+
+                            <input type="file" id="avatarInput" class="file-input" accept="image/*"
+                                onchange="handleAvatarUpload(event)">
+                        </div>
+                        <button class="random-button" onclick="loadRandomAvatar()">🎲 Random Avatar</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" class="form-input" id="fullName" value="Sarah Mitchell"
+                        placeholder="Enter your name">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input type="text" class="form-input" id="username" value="@sarahmitchell" placeholder="@username">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Bio</label>
+                    <textarea class="form-textarea" id="bio"
+                        placeholder="Tell people about yourself...">Creative Director & Brand Strategist. Helping brands tell their stories through design. Currently working at a tech startup in NYC.</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" id="email" value="hello@sarahmitchell.com"
+                        placeholder="your@email.com">
+                </div>
+            </div>
+
+            <!-- Links Management Panel -->
+            <div class="panel">
+                <h2 class="panel-title">
+                    <span class="panel-icon">🔗</span>
+                    Manage Links
+                </h2>
+
+                <div id="linksContainer">
+                    <!-- Links will be dynamically added here -->
+                </div>
+
+                <button class="add-link-button" onclick="addNewLink()">
+                    ➕ Add New Link
+                </button>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="panel" style="margin-top: 24px;">
+            <button class="save-button" onclick="saveChanges()">
+                💾 Save All Changes
+            </button>
+            <button class="preview-button" onclick="previewCard()">
+                👁️ Preview Card
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Default links data
+        let linksData = [
+            {
+                id: 1,
+                title: 'Read My Blog',
+                subtitle: 'Articles about design, creativity, and innovation',
+                url: 'https://medium.com/@sarahmitchell',
+                icon: 'M',
+                enabled: true
+            },
+            {
+                id: 2,
+                title: 'Instagram',
+                subtitle: 'Daily inspiration & behind the scenes',
+                url: 'https://instagram.com/sarahmitchell',
+                icon: 'instagram',
+                enabled: true
+            },
+            {
+                id: 3,
+                title: 'Twitter',
+                subtitle: 'Thoughts on design & tech',
+                url: 'https://twitter.com/sarahmitchell',
+                icon: 'X',
+                enabled: true
+            },
+            {
+                id: 4,
+                title: 'LinkedIn',
+                subtitle: 'Professional network',
+                url: 'https://linkedin.com/in/sarahmitchell',
+                icon: 'in',
+                enabled: true
+            },
+            {
+                id: 5,
+                title: '⭐⭐⭐⭐⭐ Review Us on Google',
+                subtitle: 'Share your 5-star experience!',
+                url: 'https://maps.google.com/?q=Sarah+Mitchell+Design+Studio',
+                icon: '⭐',
+                enabled: true,
+                special: true
+            },
+            {
+                id: 6,
+                title: 'Email Me',
+                subtitle: 'hello@sarahmitchell.com',
+                url: 'mailto:hello@sarahmitchell.com',
+                icon: 'email',
+                enabled: true
+            }
+        ];
+
+        let nextLinkId = 7;
+        let currentAvatarUrl = null;
+
+        // Load saved data from localStorage
+        function loadSavedData() {
+            const savedProfile = localStorage.getItem('profileData');
+            if (savedProfile) {
+                const profile = JSON.parse(savedProfile);
+                document.getElementById('fullName').value = profile.name || '';
+                document.getElementById('username').value = profile.username || '';
+                document.getElementById('bio').value = profile.bio || '';
+                document.getElementById('email').value = profile.email || '';
+                if (profile.avatarUrl) {
+                    currentAvatarUrl = profile.avatarUrl;
+                    updateAvatarPreview(profile.avatarUrl);
+                }
+            }
+
+            const savedLinks = localStorage.getItem('linksData');
+            if (savedLinks) {
+                linksData = JSON.parse(savedLinks);
+            }
+
+            renderLinks();
+        }
+
+        // Render all links
+        function renderLinks() {
+            const container = document.getElementById('linksContainer');
+            container.innerHTML = '';
+
+            linksData.forEach(link => {
+                const linkItem = document.createElement('div');
+                linkItem.className = 'link-item';
+                linkItem.innerHTML = `
+                    <div class="link-header">
+                        <span class="link-name">${link.title}</span>
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <label class="toggle-switch">
+                                <input type="checkbox" ${link.enabled ? 'checked' : ''} 
+                                    onchange="toggleLink(${link.id})">
+                                <span class="toggle-slider"></span>
+                            </label>
+                            <button class="delete-link-button" onclick="deleteLink(${link.id})">
+                                🗑️
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Title</label>
+                        <input type="text" class="form-input" value="${link.title}" 
+                            onchange="updateLink(${link.id}, 'title', this.value)">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Subtitle</label>
+                        <input type="text" class="form-input" value="${link.subtitle}" 
+                            onchange="updateLink(${link.id}, 'subtitle', this.value)">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">URL</label>
+                        <input type="url" class="form-input" value="${link.url}" 
+                            onchange="updateLink(${link.id}, 'url', this.value)">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Icon (emoji or letter)</label>
+                        <input type="text" class="form-input" value="${link.icon}" 
+                            onchange="updateLink(${link.id}, 'icon', this.value)">
+                    </div>
+                `;
+                container.appendChild(linkItem);
+            });
+        }
+
+        // Add new link
+        function addNewLink() {
+            const newLink = {
+                id: nextLinkId++,
+                title: 'New Link',
+                subtitle: 'Description',
+                url: 'https://example.com',
+                icon: '🔗',
+                enabled: true
+            };
+            linksData.push(newLink);
+            renderLinks();
+        }
+
+        // Update link property
+        function updateLink(id, property, value) {
+            const link = linksData.find(l => l.id === id);
+            if (link) {
+                link[property] = value;
+            }
+        }
+
+        // Toggle link enabled/disabled
+        function toggleLink(id) {
+            const link = linksData.find(l => l.id === id);
+            if (link) {
+                link.enabled = !link.enabled;
+            }
+        }
+
+        // Delete link
+        function deleteLink(id) {
+            if (confirm('Are you sure you want to delete this link?')) {
+                linksData = linksData.filter(l => l.id !== id);
+                renderLinks();
+            }
+        }
+
+        // Handle avatar upload
+        function handleAvatarUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    currentAvatarUrl = e.target.result;
+                    updateAvatarPreview(currentAvatarUrl);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Load random avatar from Unsplash
+        function loadRandomAvatar() {
+            const randomId = Math.floor(Math.random() * 1000);
+            currentAvatarUrl = `https://picsum.photos/200/200?random=${randomId}`;
+            updateAvatarPreview(currentAvatarUrl);
+        }
+
+        // Update avatar preview
+        function updateAvatarPreview(url) {
+            const preview = document.getElementById('avatarPreview');
+            preview.innerHTML = `<img src="${url}" alt="Avatar">`;
+        }
+
+        // Save all changes
+        function saveChanges() {
+            const profileData = {
+                name: document.getElementById('fullName').value,
+                username: document.getElementById('username').value,
+                bio: document.getElementById('bio').value,
+                email: document.getElementById('email').value,
+                avatarUrl: currentAvatarUrl
+            };
+
+            localStorage.setItem('profileData', JSON.stringify(profileData));
+            localStorage.setItem('linksData', JSON.stringify(linksData));
+
+            alert('✅ All changes saved successfully!');
+        }
+
+        // Preview card
+        function previewCard() {
+            saveChanges();
+            window.open('index.html', '_blank');
+        }
+
+        // Initialize
+        loadSavedData();
+    </script>
+</body>
+
+</html>
